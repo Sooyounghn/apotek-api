@@ -96,15 +96,15 @@
         box-sizing: border-box;
     }
 
+    .form-group textarea {
+        min-height: 110px;
+        resize: vertical;
+    }
+
     .form-group input:focus,
     .form-group textarea:focus {
         border-color: #198754;
         box-shadow: 0 0 0 3px rgba(25, 135, 84, .10);
-    }
-
-    .form-group textarea {
-        min-height: 110px;
-        resize: vertical;
     }
 
     .form-hint {
@@ -192,17 +192,6 @@
         </div>
     @endif
 
-    @if ($errors->any())
-        <div class="alert alert-danger alert-create">
-            <strong>Data belum lengkap!</strong>
-            <ul class="mb-0 mt-2">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <div class="create-card">
 
         <div class="create-card-header">
@@ -212,7 +201,7 @@
 
         <div class="create-card-body">
 
-            <form action="{{ route('pelanggan.store') }}" method="POST">
+           <form action="/pelanggan" method="POST">
                 @csrf
 
                 <div class="form-group">
@@ -268,8 +257,7 @@
                         Simpan Pelanggan
                     </button>
 
-                    <a href="{{ route('pelanggan.index') }}"
-                       class="btn-cancel">
+                    <a href="{{ route('pelanggan.index') }}" class="btn-cancel">
                         Kembali
                     </a>
                 </div>

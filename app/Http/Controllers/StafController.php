@@ -3,142 +3,94 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\Models\Staf;
 use Illuminate\Support\Facades\Log;
 
 class StafController extends Controller
 {
-    private $apiUrl = 'http://127.0.0.1:8001/api/staf';
-
-    // Menampilkan semua data staf
     public function index()
     {
         try {
-            $response = Http::acceptJson()->get($this->apiUrl);
-
-            $hasil = $response->successful()
-                ? $response->json()
-                : [];
-
-            $staf = $hasil['data'] ?? $hasil;
-
-            if (!is_array($staf)) {
-                $staf = [];
-            }
-
+            $staf = Staf::latest()->get();
             return view('staf.index', compact('staf'));
-
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-
-            return view('staf.index', [
-                'staf' => []
-            ])->with('error', 'Tidak dapat terhubung ke API.');
+            return view('staf.index', ['staf' => []])
+                ->with('error', 'Gagal mengambil data staf.');
         }
     }
 
-    // Menambahkan staf
+    public function create()
+    {
+        return view('staf.create');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'alamat' => 'required|string',
+            'nama'          => 'required|string|max:255',
+            'alamat'        => 'required|string',
             'tanggal_lahir' => 'required|date',
-            'tempat_lahir' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:20',
+            'tempat_lahir'  => 'required|string|max:255',
+            'no_hp'         => 'required|string|max:20',
         ]);
 
         try {
-            $response = Http::acceptJson()
-                ->asJson()
-                ->post($this->apiUrl, $validated);
-
-            if ($response->successful()) {
-                return redirect()->route('staf.index')
-                    ->with('success', 'Data staf berhasil ditambahkan.');
-            }
-
-            return back()->withInput()
-                ->with('error', 'Gagal menambahkan data staf.');
-
+            Staf::create($validated);
+            return redirect()->route('staf.index')
+                ->with('success', 'Data staf berhasil ditambahkan.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-
-            return back()->withInput()
-                ->with('error', 'Tidak dapat terhubung ke API.');
+            return back()->withInput()->with('error', 'Gagal menyimpan data staf.');
         }
     }
 
-    // Menampilkan detail staf
     public function show($id)
     {
-        $response = Http::acceptJson()
-            ->get($this->apiUrl . '/' . $id);
-
-        if (!$response->successful()) {
-            return redirect()->route('staf.index')
-                ->with('error', 'Data staf tidak ditemukan.');
-        }
-
-        $hasil = $response->json();
-        $staf = $hasil['data'] ?? $hasil;
-
+        $staf = Staf::findOrFail($id);
         return view('staf.show', compact('staf'));
     }
 
-    // Form edit staf
     public function edit($id)
     {
-        $response = Http::acceptJson()
-            ->get($this->apiUrl . '/' . $id);
-
-        if (!$response->successful()) {
-            return redirect()->route('staf.index')
-                ->with('error', 'Data staf tidak ditemukan.');
-        }
-
-        $hasil = $response->json();
-        $staf = $hasil['data'] ?? $hasil;
-
+        $staf = Staf::findOrFail($id);
         return view('staf.edit', compact('staf'));
     }
 
-    // Memperbarui data staf
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'alamat' => 'required|string',
+            'nama'          => 'required|string|max:255',
+            'alamat'        => 'required|string',
             'tanggal_lahir' => 'required|date',
-            'tempat_lahir' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:20',
+            'tempat_lahir'  => 'required|string|max:255',
+            'no_hp'         => 'required|string|max:20',
         ]);
 
-        $response = Http::acceptJson()
-            ->asJson()
-            ->put($this->apiUrl . '/' . $id, $validated);
+        try {
+            $staf = Staf::findOrFail($id);
+            $staf->update($validated);
 
-        if ($response->successful()) {
             return redirect()->route('staf.index')
                 ->with('success', 'Data staf berhasil diperbarui.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return back()->withInput()->with('error', 'Gagal memperbarui data staf.');
         }
-
-        return back()->withInput()
-            ->with('error', 'Gagal memperbarui data staf.');
     }
 
-    // Menghapus data staf
     public function destroy($id)
     {
-        $response = Http::acceptJson()
-            ->delete($this->apiUrl . '/' . $id);
+        try {
+            $staf = Staf::findOrFail($id);
+            $staf->delete();
 
-        if ($response->successful()) {
             return redirect()->route('staf.index')
                 ->with('success', 'Data staf berhasil dihapus.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->route('staf.index')
+                ->with('error', 'Gagal menghapus data staf.');
         }
-
-        return redirect()->route('staf.index')
-            ->with('error', 'Gagal menghapus data staf.');
     }
 }

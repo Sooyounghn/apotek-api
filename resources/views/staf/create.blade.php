@@ -1,4 +1,4 @@
- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Tambah Staf - Apotek+')
 @section('page-title', 'Tambah Staf')
@@ -35,12 +35,12 @@
         @endif
 
         @if (session('error'))
-            <p style="color: #a33;">
+            <p style="color: #a33; margin-bottom: 20px;">
                 {{ session('error') }}
             </p>
         @endif
 
-        <form action="{{ route('staf.store') }}" method="POST">
+        <form action="/staf" method="POST">
             @csrf
 
             <div style="margin-bottom: 20px;">

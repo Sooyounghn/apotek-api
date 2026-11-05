@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -283,32 +282,31 @@
 
                             <td>
                                 <div class="staff-name">
-                                    {{ $item['nama'] }}
+                                    {{ $item->nama }}
                                 </div>
                                 <div class="staff-id">
-                                    ID Staf: {{ $item['id_staff'] }}
+                                    ID Staf: {{ $item->id_staff }}
                                 </div>
                             </td>
 
-                            <td>{{ $item['alamat'] }}</td>
-                            <td>{{ $item['tanggal_lahir'] }}</td>
-                            <td>{{ $item['tempat_lahir'] }}</td>
-                            <td>{{ $item['no_hp'] }}</td>
+                            <td>{{ $item->alamat }}</td>
+                            <td>{{ $item->tanggal_lahir }}</td>
+                            <td>{{ $item->tempat_lahir }}</td>
+                            <td>{{ $item->no_hp }}</td>
 
                             <td>
                                 <div class="staff-actions">
 
-                                    <a href="{{ route('staf.show', $item['id_staff']) }}"
-                                       class="btn-detail">
+                                    <!-- PARAMETER DIBUAT EKSPLISIT LEWAT OBJECT -->
+                                    <a href="/staf/{{ $item->id_staff }}/detail" class="btn-detail">
                                         Detail
                                     </a>
 
-                                    <a href="{{ route('staf.edit', $item['id_staff']) }}"
-                                       class="btn-edit">
+                                    <a href="/staf/{{ $item->id_staff }}/edit" class="btn-edit">
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('staf.destroy', $item['id_staff']) }}"
+                                    <form action="/staf/{{ $item->id_staff }}"
                                           method="POST"
                                           onsubmit="return confirm('Yakin ingin menghapus staf ini?')">
                                         @csrf

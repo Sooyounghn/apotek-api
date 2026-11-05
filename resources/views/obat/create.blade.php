@@ -1,4 +1,4 @@
- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Tambah Obat - Apotek+')
 @section('page-title', 'Tambah Obat')
@@ -35,48 +35,48 @@
         @endif
 
         @if (session('error'))
-            <p style="color: #a33;">
+            <p style="color: #a33; margin-bottom: 20px;">
                 {{ session('error') }}
             </p>
         @endif
 
-        <form action="{{ route('obat.store') }}" method="POST">
+        <form action="/obat" method="POST">
             @csrf
 
             <div style="margin-bottom: 20px;">
-                <label>Nama Obat</label>
+                <label style="font-weight: 600; color: #354b3c; display: block; margin-bottom: 8px;">Nama Obat</label>
                 <input type="text" name="nama_obat"
                     value="{{ old('nama_obat') }}"
                     placeholder="Masukkan nama obat"
                     required
-                    style="display:block; width:100%; padding:13px; margin-top:8px; border:1px solid #dce4da; border-radius:8px;">
+                    style="display:block; width:100%; padding:13px; border:1px solid #dce4da; border-radius:8px; outline: none;">
             </div>
 
             <div style="margin-bottom: 20px;">
-                <label>Stok Obat</label>
+                <label style="font-weight: 600; color: #354b3c; display: block; margin-bottom: 8px;">Stok Obat</label>
                 <input type="number" name="stock_obat"
                     value="{{ old('stock_obat') }}"
                     placeholder="Masukkan jumlah stok"
                     min="0"
                     required
-                    style="display:block; width:100%; padding:13px; margin-top:8px; border:1px solid #dce4da; border-radius:8px;">
+                    style="display:block; width:100%; padding:13px; border:1px solid #dce4da; border-radius:8px; outline: none;">
             </div>
 
             <div style="margin-bottom: 30px;">
-                <label>Tanggal Kedaluwarsa</label>
+                <label style="font-weight: 600; color: #354b3c; display: block; margin-bottom: 8px;">Tanggal Kedaluwarsa</label>
                 <input type="date" name="tanggal_kadaluarsa"
                     value="{{ old('tanggal_kadaluarsa') }}"
                     required
-                    style="display:block; width:100%; padding:13px; margin-top:8px; border:1px solid #dce4da; border-radius:8px;">
+                    style="display:block; width:100%; padding:13px; border:1px solid #dce4da; border-radius:8px; outline: none;">
             </div>
 
             <button type="submit"
-                style="background:#718b72; color:white; padding:13px 25px; border:none; border-radius:8px; cursor:pointer;">
+                style="background:#718b72; color:white; padding:13px 25px; border:none; border-radius:8px; cursor:pointer; font-weight: 600;">
                 Simpan Obat
             </button>
 
             <a href="{{ route('obat.index') }}"
-                style="margin-left:15px; color:#718b72; text-decoration:none;">
+                style="margin-left:15px; color:#718b72; text-decoration:none; font-weight: 600;">
                 Batal
             </a>
 
